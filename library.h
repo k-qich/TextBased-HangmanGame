@@ -10,9 +10,7 @@ namespace hangman
 {
 	class Library
 	{
-		std::string easyWords[MAX_LIBRARY];
-		std::string normalWords[MAX_LIBRARY];
-		std::string hardWords[MAX_LIBRARY];
+		std::string words[MAX_LIBRARY];
 
 		public:
 			Library();
