@@ -133,40 +133,65 @@ namespace hangman
 
 	void Hangman::drawHangman(int guesses) const
 	{
+		int count;
+
 		cout << "       _______" << endl;
 
-		if (guesses >= 1)
+		if (guesses < 1)
 		{
-			cout << "      |	      |" << endl;
-			cout << "      |	      |" << endl;
-			cout << "      |      ()" << endl;
+			for (int i = 0; i < 9; ++i)
+			{
+				cout << "      |" << endl;
+			}
 		}
+		else
+		{
+			if (guesses >= 1)
+			{
+				cout << "      |	      |" << endl;
+				cout << "      |	      |" << endl;
+				cout << "      |      ()" << endl;
+			}
 
-		if (guesses >= 4)
-		{
-			cout << "      |      /|\\" << endl;
-		}
-		else if (guesses >= 3)
-		{
-			cout << "      |      /|" << endl;
-		}
-		else if (guesses >= 2)
-		{
-			cout << "      |       |" << endl;
-		}
+			if (guesses >= 4)
+			{
+				cout << "      |      /|\\" << endl;
+			}
+			else if (guesses >= 3)
+			{
+				cout << "      |      /|" << endl;
+			}
+			else if (guesses >= 2)
+			{
+				cout << "      |       |" << endl;
+			}
 
-		if (guesses >= 6)
-		{
-			cout << "      |      / \\" << endl;
-		}
-		else if (guesses >= 5)
-		{
-			cout << "      |      /" << endl;
-		}
+			if (guesses >= 6)
+			{
+				cout << "      |      / \\" << endl;
+			}
+			else if (guesses >= 5)
+			{
+				cout << "      |      /" << endl;
+			}
+			
+			if (guesses == 1)
+			{
+				count = 6;
+			}
+			else if (guesses > 1 && guesses < 5)
+			{
+				count = 5;
+			}
+			else
+			{
+				count = 4;
+			}
 
-		for (int i = 0; i < (9 - guesses); ++i)
-		{
-			cout << "      |" << endl;
+			for (int i = 0; i < count; ++i)
+			{
+				cout << "      |" << endl;
+			}
 		}
 
 		cout << "  ----------------------" << endl;
