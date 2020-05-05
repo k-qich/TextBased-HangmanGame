@@ -1,8 +1,11 @@
 #include <limits>
+#include <string>
 #include "util.h"
 
 using std::cin;
 using std::cout;
+using std::istream;
+using std::ostream;
 using std::streamsize;
 using std::string;
 using std::numeric_limits;
@@ -11,10 +14,22 @@ namespace util
 {
 	void pause()
 	{
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "Press ENTER to continue";
+		cout << "***** Press ENTER to continue *****";
 		while (cin.get() != '\n');
+	}
+
+	bool yesOrNoPrompt(const char* err_msg, istream& is, ostream& os)
+	{
+		string choice;
+		getline(is, choice);
+
+		while (choice.length() != 1 || !((choice[0] == 'Y' || choice[0] == 'y') || (choice[0] == 'N' || choice[0] == 'n')))
+		{
+			os << err_msg;
+			getline(is, choice);
+		}
+
+		return (choice[0] == 'Y' || choice[0] == 'y');
 	}
 
 	string createHiddenWord(const string str, const char c)
@@ -28,17 +43,21 @@ namespace util
 
 		return ret;
 	}
-	std::string revealHiddenCharacters(const std::string str, const std::string h_str, const char c)
+
+	string::size_type revealHiddenCharacters(const string str, string &h_str, const char c)
 	{
-		string ret = h_str;
+		string::size_type num_revealed = 0;
 
 		for (unsigned int i = 0; i < str.length(); ++i)
 		{
 			if (str[i] == c)
-				ret[i] = c;
+			{
+				h_str[i] = c;
+				num_revealed++;
+			}
 		}
 
-		return ret;
+		return num_revealed;
 	}
 }
 

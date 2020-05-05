@@ -17,7 +17,7 @@ namespace hangman
 {
 	Hangman::Hangman()
 	{
-		reset("Hangman");
+		reset("HANGMAN");
 	}
 
 	int Hangman::menu()
@@ -38,6 +38,8 @@ namespace hangman
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			cout << "  Selection: ";
 		}
+
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 		return choice;
 	}
@@ -73,67 +75,60 @@ namespace hangman
 	void Hangman::playSinglePlayer()
 	{
 		string player_guess;
-		bool valid_guess;
-		unsigned int corr_guesses = 0;
-		int inv_guesses = 0;
 		int pos;
+		int invalid_guesses = 0;
+		string::size_type correct_guesses = 0;
+		bool valid_guess;
 
 		cout << "\n*************** Singleplayer Mode ***************\n" << endl;
 
-		while (inv_guesses < MAX_GUESSES && corr_guesses < o_word.length())
+		while (invalid_guesses < MAX_GUESSES && correct_guesses < o_word.length())
 		{
 			valid_guess = false;
 
 			// display game visuals
-			drawHangman(inv_guesses);
+			drawHangman(invalid_guesses);
 			drawWordDisplay();
 			drawCharacterBank();
 
-			// prompt player to guess a character or the entire word
-			cout << "Enter a character or a word: ";
-			
+			cout << "Enter a character: ";
+
 			// validate player input
 			while (!valid_guess)
 			{
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 				getline(cin, player_guess);
 
-				if (player_guess.length() == 1)
+				// check if the player has already guessed the character
+				pos = ch_bank.find(toupper(player_guess[0]));
+				if (pos != string::npos)
 				{
-					// check if the player has already guessed the character
-					pos = ch_bank.find(toupper(player_guess[0]));
+					ch_bank.replace(pos, 1, "#");
+					valid_guess = true;
+
+					// check if character is in the word
+					pos = o_word.find(toupper(player_guess[0]));
 					if (pos != string::npos)
 					{
-						ch_bank.replace(pos, 1, "#");
-						valid_guess = true;
-
-						// check if character is in the word
-						pos = o_word.find(toupper(player_guess[0]));
-						if (pos != string::npos)
-						{
-							h_word = revealHiddenCharacters(o_word, h_word, player_guess[0]);
-							corr_guesses++;
-						}
-						else
-						{
-							inv_guesses++;
-						}
+						correct_guesses += revealHiddenCharacters(o_word, h_word, toupper(player_guess[0]));
 					}
 					else
 					{
-						cout << "You've already guessed that character. Enter a character: ";
+						invalid_guesses++;
 					}
 				}
 				else
 				{
-					// check if player's guess matches the full word					
-					player_guess.compare(o_word) == 0 ? corr_guesses++ : inv_guesses++;
-					valid_guess = true;
+					cout << "You've already guessed that character. Enter a character: ";
 				}
 			}
 		}
 
-		corr_guesses == o_word.length() ? (cout << "***** WINNER *****\n") : (cout << "***** BETTER LUCK NEXT TIME *****\n");
+		drawHangman(invalid_guesses);
+		drawWordDisplay();
+		drawCharacterBank();
+
+		correct_guesses == o_word.length() ? (cout << "***** WINNER *****\n") : (cout << "***** BETTER LUCK NEXT TIME *****\n");
+		pause();
 	}
 
 	void Hangman::drawHangman(int guesses) const
@@ -219,7 +214,7 @@ namespace hangman
 	{
 		int choice;
 		bool running = true;
-		bool replay = false;
+		bool replay = true;
 		displayBanner();
 
 		while (running)
@@ -234,12 +229,18 @@ namespace hangman
 			case 2:
 				break;
 			case 3:
+				playSinglePlayer();
+				running = false;
+				/*
 				while (replay)
 				{
 					playSinglePlayer();
-					// prompt yes/no
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					cout << "Play again? Y/N:";
+					replay = yesOrNoPrompt("Y/N, retry: ");
 					reset("Hangman");
 				}
+				*/
 				break;
 			case 4:
 				break;
