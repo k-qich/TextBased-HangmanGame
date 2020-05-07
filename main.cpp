@@ -5,6 +5,6 @@ using namespace hangman;
 
 int main()
 {
-	Hangman game;
-	game.run();
+	Hangman *game = new Hangman();
+	game->run();
 }

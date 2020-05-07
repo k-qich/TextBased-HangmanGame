@@ -1,6 +1,6 @@
 #include <limits>
+#include <string>
 #include "hangman.h"
-#include "library.h"
 #include "util.h"
 
 using std::cin;
@@ -20,6 +20,7 @@ namespace hangman
 		reset("HANGMAN");
 	}
 
+	// displays a menu that players can choose from
 	int Hangman::menu()
 	{
 		int choice;
@@ -28,8 +29,7 @@ namespace hangman
 		cout << "  1. How to Play" << endl;
 		cout << "  2. Add Word" << endl;
 		cout << "  3. 1-player" << endl;
-		cout << "  4. 2-player" << endl;
-		cout << "  5. Quit\n" << endl;
+		cout << "  4. Quit\n" << endl;
 		cout << "  Selection: ";
 
 		while (!(cin >> choice) || (choice < 1 || choice > 5))
@@ -44,6 +44,7 @@ namespace hangman
 		return choice;
 	}
 
+	// draws the hangman game banner
 	void Hangman::displayBanner() const
 	{
 		cout << "***************************************************************" << endl;
@@ -64,6 +65,7 @@ namespace hangman
 		cout << "****************************************************************" << endl;
 	}
 
+	// displays the rules of the game
 	void Hangman::displayRules() const
 	{
 		cout << "  Objective: Guess the hidden word correctly before the stickman is hanged!" << endl;
@@ -72,6 +74,7 @@ namespace hangman
 		cout << "  A player loses when they run out of guesses and the stickman is fully hanged." << endl;
 	}
 
+	// plays the single player mode
 	void Hangman::playSinglePlayer()
 	{
 		string player_guess;
@@ -131,6 +134,7 @@ namespace hangman
 		pause();
 	}
 
+	// draws the hangman based on the number of incorrect guesses the player has made
 	void Hangman::drawHangman(int guesses) const
 	{
 		int count;
@@ -197,6 +201,7 @@ namespace hangman
 		cout << "  ----------------------" << endl;
 	}
 
+	// displays the word the player is trying to guess
 	void Hangman::drawWordDisplay() const
 	{
 		cout << "\n  ";
@@ -209,6 +214,7 @@ namespace hangman
 		cout << endl << endl;
 	}
 
+	// displays the available characters the player can guess from
 	void Hangman::drawCharacterBank() const
 	{
 		cout << "[--------- Available Characters ---------]\n" << endl;
@@ -228,6 +234,7 @@ namespace hangman
 		cout << "\n\n[----------------------------------------]\n" << endl;
 	}
 
+	// resets game variables
 	void Hangman::reset(const string word)
 	{
 		ch_bank = CHARACTER_BANK;
@@ -254,25 +261,19 @@ namespace hangman
 			case 2:
 				break;
 			case 3:
-				playSinglePlayer();
-				running = false;
-				/*
 				while (replay)
 				{
 					playSinglePlayer();
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
 					cout << "Play again? Y/N:";
 					replay = yesOrNoPrompt("Y/N, retry: ");
-					reset("Hangman");
+					reset("HANGMAN");
 				}
-				*/
 				break;
 			case 4:
-				break;
-			case 5:
+				running = false;
 				break;
 			default:
-				break;
+				running = false;
 			}
 		}
 
