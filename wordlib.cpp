@@ -1,5 +1,9 @@
+#include <fstream>
 #include "wordlib.h"
 
+using std::fstream;
+using std::ifstream;
+using std::ofstream;
 using std::ostream;
 using std::string;
 
@@ -12,6 +16,7 @@ namespace hangman
 
 	WordLib::WordLib()
 	{
+		num_words = 0;
 		lib = nullptr;
 	}
 
@@ -26,6 +31,11 @@ namespace hangman
 			delete curr;
 			curr = next;
 		}
+	}
+
+	int WordLib::getNumWords()
+	{
+		return num_words;
 	}
 
 	// appends the word to end of linked list
@@ -51,6 +61,42 @@ namespace hangman
 
 			curr->next = word;
 		}
+
+		++num_words;
+	}
+
+	// reads all words from the given file into the library
+	int WordLib::read(const std::string filename)
+	{
+		int num_read = 0;
+		string word;
+
+		ifstream file(filename);
+		if (file)
+		{
+			// read and insert each word into the library
+			while (file)
+			{
+				file >> word;
+				if (file)
+				{
+					append(word);
+					++num_read;
+				}
+			}
+		}
+
+		file.close();
+
+		return num_read;
+	}
+
+	// appends the given word to the end of the file
+	void WordLib::write(const std::string filename, std::string word)
+	{
+		ofstream file(filename, fstream::app);
+		file << word;
+		file.close();
 	}
 
 	// displays the entire linked list

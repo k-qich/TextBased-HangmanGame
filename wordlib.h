@@ -19,11 +19,15 @@ namespace hangman
 	class WordLib
 	{
 		Word* lib;
+		int num_words;
 
 		public:
 			WordLib();
 			~WordLib();
+			int getNumWords();
 			void append(std::string str);
+			int read(const std::string filename);
+			void write(const std::string filename, std::string word);
 			std::ostream& display(std::ostream& os = std::cout) const;
 	};
 }

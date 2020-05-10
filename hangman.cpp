@@ -17,6 +17,7 @@ namespace hangman
 {
 	Hangman::Hangman()
 	{
+		library.read(FILENAME);
 		reset("HANGMAN");
 	}
 
@@ -26,6 +27,8 @@ namespace hangman
 		int choice;
 
 		cout << endl;
+		if (library.getNumWords() < 1)
+			cout << "***** MISSING WORDS TEXT FILE *****" << endl;
 		cout << "  1. How to Play" << endl;
 		cout << "  2. Add Word" << endl;
 		cout << "  3. 1-player" << endl;
@@ -72,6 +75,17 @@ namespace hangman
 		cout << "\n  Players may guess a single character at a time or the entire word if they think they know what the word is." << endl;
 		cout << "  Each incorrect guess will reduce the number of available guesses that depends on the selected difficulty. 6(Normal), 3(Hard)" << endl;
 		cout << "  A player loses when they run out of guesses and the stickman is fully hanged." << endl;
+	}
+
+	// adds a new word to the library
+	void Hangman::addWord()
+	{
+		string word;
+		cout << "  Enter a word: ";
+		getline(cin, word);
+		word = toUpperStr(word);
+		library.append(word);
+		library.write(FILENAME, word);
 	}
 
 	// plays the single player mode
@@ -259,9 +273,11 @@ namespace hangman
 				pause();
 				break;
 			case 2:
+				cout << endl;
+				addWord();
 				break;
 			case 3:
-				while (replay)
+				while (replay && library.getNumWords() > 0)
 				{
 					playSinglePlayer();
 					cout << "Play again? Y/N:";

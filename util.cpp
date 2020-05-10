@@ -59,5 +59,17 @@ namespace util
 
 		return num_revealed;
 	}
+
+	string toUpperStr(const string str)
+	{
+		string ustr;
+
+		for (unsigned int i = 0; i < str.length(); ++i)
+		{
+			ustr += toupper(str[i]);
+		}
+
+		return ustr;
+	}
 }
 
