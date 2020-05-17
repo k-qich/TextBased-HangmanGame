@@ -18,7 +18,6 @@ namespace hangman
 	Hangman::Hangman()
 	{
 		library.read(FILENAME);
-		reset("HANGMAN");
 	}
 
 	// displays a menu that players can choose from
@@ -28,7 +27,7 @@ namespace hangman
 
 		cout << endl;
 		if (library.getNumWords() < 1)
-			cout << "***** MISSING WORDS TEXT FILE *****" << endl;
+			cout << "***** NO WORDS AVAILABLE *****" << endl;
 		cout << "  1. How to Play" << endl;
 		cout << "  2. Add Word" << endl;
 		cout << "  3. 1-player" << endl;
@@ -144,7 +143,7 @@ namespace hangman
 		drawWordDisplay();
 		drawCharacterBank();
 
-		correct_guesses == o_word.length() ? (cout << "***** WINNER *****\n") : (cout << "***** BETTER LUCK NEXT TIME *****\n");
+		correct_guesses == o_word.length() ? (cout << "***** WINNER *****\n") : (cout << "***** BETTER LUCK NEXT TIME *****\nAnswer: " << o_word << "\n");
 		pause();
 	}
 
@@ -279,14 +278,15 @@ namespace hangman
 			case 3:
 				while (replay && library.getNumWords() > 0)
 				{
+					reset(library.getWord());
 					playSinglePlayer();
 					cout << "Play again? Y/N:";
 					replay = yesOrNoPrompt("Y/N, retry: ");
-					reset("HANGMAN");
 				}
 				break;
 			case 4:
 				running = false;
+				library.storelib(FILENAME);
 				break;
 			default:
 				running = false;

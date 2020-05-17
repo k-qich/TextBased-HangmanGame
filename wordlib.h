@@ -25,9 +25,12 @@ namespace hangman
 			WordLib();
 			~WordLib();
 			int getNumWords();
+			std::string getWord();
 			void append(std::string str);
+			bool remove(std::string str);
 			int read(const std::string filename);
 			void write(const std::string filename, std::string word);
+			void storelib(const std::string filename);
 			std::ostream& display(std::ostream& os = std::cout) const;
 	};
 }
